@@ -1,43 +1,40 @@
 package iuh.fit.se.jwt_basic.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import iuh.fit.se.jwt_basic.entity.User;
 
 import java.security.Key;
 import java.util.Date;
 
 public class JwtUtil {
 
-    // 🔐 Secret phải >= 32 bytes
     private static final String SECRET =
-            "jwt-secret-key-jwt-secret-key-jwt-secret-key";
+            "ThisIsAVeryLongAndSecureJwtSecretKeyForHS256";
 
-    private static final long EXPIRATION_TIME =
-            1000 * 60 * 60; // 1 giờ
+    private static final long EXPIRATION = 3600000;
 
-    private static final Key KEY =
-            Keys.hmacShaKeyFor(SECRET.getBytes());
+    private static Key getKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
-    // 👉 Tạo token khi login
-    public static String generateToken(User user) {
+    public static String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("role", user.getRole())
+                .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + EXPIRATION_TIME)
-                )
-                .signWith(KEY, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // 👉 Verify token (dùng trong Filter)
-    public static Claims parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(KEY)
+    public static String validateTokenAndGetUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
+        return claims.getSubject();
     }
 }

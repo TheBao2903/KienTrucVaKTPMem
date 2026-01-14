@@ -43,6 +43,6 @@ public class AuthService {
             throw new RuntimeException("Wrong password");
         }
 
-        return JwtUtil.generateToken(user);
+        return JwtUtil.generateToken(String.valueOf(user));
     }
 }
