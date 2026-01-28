@@ -1,0 +1,27 @@
+@startuml
+interface Subject {
+  + attach(o: TeamMember)
+  + detach(o: TeamMember)
+  + notifyObservers()
+}
+
+interface TeamMember {
+  + update(taskStatus)
+}
+
+class Task {
+  - name: String
+  - status: TaskStatus
+}
+
+class Developer
+class Tester
+class Manager
+
+Subject <|.. Task
+TeamMember <|.. Developer
+TeamMember <|.. Tester
+TeamMember <|.. Manager
+
+Task "1" o-- "*" TeamMember : notifies
+@enduml

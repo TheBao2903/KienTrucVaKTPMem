@@ -1,0 +1,26 @@
+@startuml
+interface Subject {
+  + attach(o: Observer)
+  + detach(o: Observer)
+  + notifyObservers()
+}
+
+interface Observer {
+  + update()
+}
+
+class ConcreteSubject {
+  - state
+  + getState()
+  + setState()
+}
+
+class ConcreteObserverA
+class ConcreteObserverB
+
+Subject <|.. ConcreteSubject
+Observer <|.. ConcreteObserverA
+Observer <|.. ConcreteObserverB
+
+ConcreteSubject "1" o-- "*" Observer : notifies
+@enduml
