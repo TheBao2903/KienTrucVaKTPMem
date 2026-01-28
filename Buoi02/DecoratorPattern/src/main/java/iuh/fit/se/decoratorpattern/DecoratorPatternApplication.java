@@ -18,5 +18,4 @@ public class DecoratorPatternApplication {
 
         System.out.println(coffee.getDescription() + " = " + coffee.getCost());
     }
-
 }
