@@ -17,5 +17,4 @@ public class StatePatternApplication {
         order.ship();
         order.cancel();
     }
-
 }

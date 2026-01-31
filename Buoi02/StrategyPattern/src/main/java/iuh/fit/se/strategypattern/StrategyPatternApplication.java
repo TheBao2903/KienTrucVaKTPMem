@@ -22,5 +22,4 @@ public class StrategyPatternApplication {
         double fee3 = order.calculateShippingFee(10, 15);
         System.out.println("Fee (ECONOMY): " + fee3);
     }
-
 }
