@@ -1,0 +1,25 @@
+services:
+  mongo-register:
+    image: mongo:6
+    ports:
+      - "27018:27017"
+
+  mongo-login:
+    image: mongo:6
+    ports:
+      - "27019:27017"
+
+  register-service:
+    build: ./register_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo-register
+
+  login-service:
+    build: ./login_server
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo-login
+      - register-service
