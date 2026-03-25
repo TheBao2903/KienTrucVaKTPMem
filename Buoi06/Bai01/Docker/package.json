@@ -1,0 +1,12 @@
+{
+  "name": "bai01",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "build": "mkdir -p dist && cp server.js dist/",
+    "start": "node dist/server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

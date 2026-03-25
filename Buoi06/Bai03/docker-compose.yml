@@ -1,0 +1,53 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:6
+    environment:
+      - MONGO_INITDB_DATABASE=fooddb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodata:/data/db
+
+  users-service:
+    build: ./users-service
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/fooddb
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongo
+
+  menu-service:
+    build: ./menu-service
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/fooddb
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo
+
+  orders-service:
+    build: ./orders-service
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/fooddb
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - REACT_APP_USERS_URL=http://localhost:8081/api/users
+      - REACT_APP_MENU_URL=http://localhost:8082/api/menu
+      - REACT_APP_ORDERS_URL=http://localhost:8083/api/orders
+    depends_on:
+      - users-service
+      - menu-service
+      - orders-service
+
+volumes:
+  mongodata:
